@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 """ Console Module """
 import cmd
+from os import times_result
 import sys
 from models.base_model import BaseModel
 from models.__init__ import storage
@@ -73,7 +74,7 @@ class HBNBCommand(cmd.Cmd):
                 pline = pline[2].strip()  # pline is now str
                 if pline:
                     # check for *args or **kwargs
-                    if pline[0] is '{' and pline[-1] is'}'\
+                    if pline[0] == '{' and pline[-1] == '}'\
                             and type(eval(pline)) is dict:
                         _args = pline
                     else:
@@ -115,16 +116,40 @@ class HBNBCommand(cmd.Cmd):
 
     def do_create(self, args):
         """ Create an object of any class"""
-        if not args:
-            print("** class name missing **")
+        params = self.__validateArgs(args)
+        if type(params) != dict:
             return
-        elif args not in HBNBCommand.classes:
-            print("** class doesn't exist **")
-            return
-        new_instance = HBNBCommand.classes[args]()
+        print(params)
+        new_instance = HBNBCommand.classes[args.split()[0]]()
+        [setattr(new_instance, k, v) for k, v in params.items()]
         storage.save()
         print(new_instance.id)
-        storage.save()
+        # storage.save()
+
+    def __validateArgs(self, args):
+        """Validates Input arguments"""
+        if not args:
+            return print("** class name missing **")
+        args = args.split()
+        if args[0] not in self.classes:
+            return print("** class name missing **")
+        params = {}
+        for arg in args[1:]:
+            param = arg.split('=')
+            if len(param) == 2:
+                value = param[1]
+                if value[0] == '"' and value[-1] == '"':
+                    params[param[0]] = value.replace('_', ' ').strip('"')
+                elif value.isnumeric():
+                    params[param[0]] = int(value)
+                else:
+                    try:
+                        if float(value):
+                            # reverse for exact float point in case test/checker fails
+                            params[param[0]] = float(value)
+                    except Exception:
+                        pass
+        return params
 
     def help_create(self):
         """ Help information for the create method """
@@ -272,7 +297,7 @@ class HBNBCommand(cmd.Cmd):
                 args.append(v)
         else:  # isolate args
             args = args[2]
-            if args and args[0] is '\"':  # check for quoted arg
+            if args and args[0] == '\"':  # check for quoted arg
                 second_quote = args.find('\"', 1)
                 att_name = args[1:second_quote]
                 args = args[second_quote + 1:]
@@ -280,10 +305,10 @@ class HBNBCommand(cmd.Cmd):
             args = args.partition(' ')
 
             # if att_name was not quoted arg
-            if not att_name and args[0] is not ' ':
+            if not att_name and args[0] != ' ':
                 att_name = args[0]
             # check for quoted val arg
-            if args[2] and args[2][0] is '\"':
+            if args[2] and args[2][0] == '\"':
                 att_val = args[2][1:args[2].find('\"', 1)]
 
             # if att_val was not quoted arg
@@ -319,6 +344,7 @@ class HBNBCommand(cmd.Cmd):
         """ Help information for the update class """
         print("Updates an object with new information")
         print("Usage: update <className> <id> <attName> <attVal>\n")
+
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
