@@ -195,25 +195,6 @@ class TestHBNBCommand(unittest.TestCase):
             cons.onecmd(cmd_line)
             self.assertIn(mdl_id, cout.getvalue())
 
-    def test_class_count(self):
-        from tests import clear_stream
-        """Tests the ClassName.count() feature.
-        """
-        with patch('sys.stdout', new=StringIO()) as cout:
-            cons = HBNBCommand()
-            # no objects
-            cmd_line = cons.precmd('User.count()')
-            cons.onecmd(cmd_line)
-            self.assertEqual(cout.getvalue(), "0\n")
-            # creating objects and counting them
-            cons.onecmd('create User')
-            cons.onecmd('create User')
-            clear_stream(cout)
-            cmd_line = cons.precmd('User.count()')
-            cons.onecmd(cmd_line)
-            self.assertEqual(cout.getvalue(), "2\n")
-            self.assertTrue(int(cout.getvalue()) >= 0)
-
     def test_class_show(self):
         from tests import clear_stream
         """Tests the ClassName.show(id) feature.
