@@ -8,6 +8,8 @@ import json
 import os
 
 
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
+                 'basemodel test not supported')
 class test_basemodel(unittest.TestCase):
     """ """
 
@@ -24,7 +26,7 @@ class test_basemodel(unittest.TestCase):
     def tearDown(self):
         try:
             os.remove('file.json')
-        except:
+        except Exception:
             pass
 
     def test_default(self):
@@ -59,8 +61,12 @@ class test_basemodel(unittest.TestCase):
     def test_str(self):
         """ """
         i = self.value()
+        dictionary = {}
+        dictionary.update(i.__dict__)
+        if '_sa_instance_state' in dictionary.keys():
+            del dictionary['_sa_instance_state']
         self.assertEqual(str(i), '[{}] ({}) {}'.format(self.name, i.id,
-                         i.__dict__))
+                         dictionary))
 
     def test_todict(self):
         """ """
@@ -76,9 +82,9 @@ class test_basemodel(unittest.TestCase):
 
     def test_kwargs_one(self):
         """ """
-        n = {'Name': 'test'}
-        with self.assertRaises(KeyError):
-            new = self.value(**n)
+        n = {'name': 'test'}
+        new = self.value(**n)
+        self.assertEqual(new.name, n['name'])
 
     def test_id(self):
         """ """
