@@ -1,7 +1,9 @@
 #!/usr/bin/python3
-"""A module that defines extensively the database storage for this project"""
-from os import getenv
 
+"""
+A module that defines extensively the database storage for this project
+"""
+from os import getenv
 from models.base_model import Base
 from models.user import User
 from models.city import City

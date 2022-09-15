@@ -4,6 +4,12 @@
     checks HBNB_TYPE_STORAGE environmental variable to determine storage type
 """
 from os import getenv
+from .user import User
+from .city import City
+from .place import Place
+from .state import State
+from .review import Review
+from .amenity import Amenity
 
 if getenv('HBNB_TYPE_STORAGE') == 'db':
     from models.engine.db_storage import DBStorage
