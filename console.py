@@ -4,7 +4,6 @@
 Console Module
 """
 import cmd
-import sys
 from models.base_model import BaseModel
 from models.__init__ import storage
 from models.user import User
@@ -18,7 +17,7 @@ from models.review import Review
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
     # determines prompt for interactive/non-interactive modes
-    prompt = '(hbnb) ' if sys.__stdin__.isatty() else ''
+    prompt = '(hbnb) ' # if sys.__stdin__.isatty() else ''
 
     classes = {
                'BaseModel': BaseModel, 'User': User, 'Place': Place,
@@ -32,10 +31,10 @@ class HBNBCommand(cmd.Cmd):
              'latitude': float, 'longitude': float
             }
 
-    def preloop(self):
-        """Prints if isatty is false"""
-        if not sys.__stdin__.isatty():
-            print('(hbnb) ', end='')
+    # def preloop(self):
+    #    """Prints if isatty is false"""
+    #    if not sys.__stdin__.isatty():
+    #        print('(hbnb) ', end='')
 
     def precmd(self, line):
         """Reformat command line for advanced command syntax.
@@ -90,9 +89,13 @@ class HBNBCommand(cmd.Cmd):
 
     def postcmd(self, stop, line):
         """Prints if isatty is false"""
-        if not sys.__stdin__.isatty():
-            print('(hbnb) ', end='')
+        # if not sys.__stdin__.isatty():
+            # print('(hbnb) ')
         return stop
+
+    def postloop(self):
+        """end on a newline"""
+        # print()
 
     def do_quit(self, command):
         """ Method to exit the HBNB console"""
@@ -104,6 +107,7 @@ class HBNBCommand(cmd.Cmd):
 
     def do_EOF(self, arg):
         """ Handles EOF to exit program """
+        print()
         return True
 
     def help_EOF(self):
