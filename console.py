@@ -17,7 +17,7 @@ from models.review import Review
 class HBNBCommand(cmd.Cmd):
     """ Contains the functionality for the HBNB console"""
     # determines prompt for interactive/non-interactive modes
-    prompt = '(hbnb) ' # if sys.__stdin__.isatty() else ''
+    prompt = '(hbnb) '  # if sys.__stdin__.isatty() else ''
 
     classes = {
                'BaseModel': BaseModel, 'User': User, 'Place': Place,
@@ -90,7 +90,7 @@ class HBNBCommand(cmd.Cmd):
     def postcmd(self, stop, line):
         """Prints if isatty is false"""
         # if not sys.__stdin__.isatty():
-            # print('(hbnb) ')
+        #    print('(hbnb) ')
         return stop
 
     def postloop(self):
