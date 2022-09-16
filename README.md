@@ -1,4 +1,4 @@
-<p align="center">AirBnB clone v2</p>
+<h1 align="center">AirBnB clone v2</h1>
 
 ## Objectives
 
