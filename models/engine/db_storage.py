@@ -37,8 +37,11 @@ class DBStorage:
         objs = []
         if cls is None:
             Classes = [User, City, State, Place, Review, Amenity]
-            for Class in Classes:
-                objs = objs + self.__session.query(Class).all()
+            try:
+                for Class in Classes:
+                    objs = objs + self.__session.query(Class).all()
+            except Exception:
+                pass
         else:
             Class = eval(cls) if type(cls) == str else cls
             objs = self.__session.query(Class).all()
