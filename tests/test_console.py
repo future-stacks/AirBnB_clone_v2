@@ -146,10 +146,10 @@ class TestHBNBCommand(unittest.TestCase):
         # endregion
 
     def test_user(self):
-        from tests import clear_stream
         """Tests the show, create, destroy, update, and all
         commands with a User model.
         """
+        from tests import clear_stream
         with patch('sys.stdout', new=StringIO()) as cout:
             cons = HBNBCommand()
             # creating a User instance
@@ -180,6 +180,20 @@ class TestHBNBCommand(unittest.TestCase):
             self.assertEqual(cout.getvalue(), '')
             cons.onecmd('show User {}'.format(mdl_id))
             self.assertEqual(cout.getvalue(), '** no instance found **\n')
+
+    def test_state(self):
+        """
+        Test States
+        """
+        from tests import clear_stream
+        with patch('sys.stdout', new=StringIO()) as cout:
+            cons = HBNBCommand()
+            clear_stream(cout)
+            cons.onecmd('create State name="California"')
+            mdl_id = cout.getvalue().strip()
+            clear_stream(cout)
+            cons.onecmd('show State {}'.format(mdl_id))
+            self.assertIn(mdl_id, cout.getvalue())
 
     def test_class_all(self):
         from tests import clear_stream
