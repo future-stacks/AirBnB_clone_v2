@@ -3,6 +3,7 @@
 """
 import json
 import os
+import MySQLdb
 import unittest
 from io import StringIO
 from unittest.mock import patch
@@ -11,6 +12,92 @@ from console import HBNBCommand
 from models import storage
 from models.base_model import BaseModel
 
+
+@unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') != 'db',
+                 'file_storage test not supported here')
+class TestDBStorageWithConsole(unittest.TestCase):
+    """
+    Test dbstorage engine with console
+    """
+    def query(self, string):
+        """Sending database query"""
+        db = MySQLdb.connect(
+            user=os.getenv('HBNB_MYSQL_USER'),
+            host=os.getenv('HBNB_MYSQL_HOST'),
+            passwd=os.getenv('HBNB_MYSQL_PWD'),
+            port=int(os.getenv('HBNB_MYSQL_PORT')),
+            db=os.getenv('HBNB_MYSQL_DB')
+        )
+        cur = db.cursor()
+        cur.execute(string)
+        count = cur.fetchall()
+        cur.close()
+        db.close()
+        return count
+
+    def test_create_state(self):
+        """Test create State"""
+        string = "SELECT * FROM states"
+        old_count = self.query(string)
+        cmd = 'create State name="California"'
+        self.getOutput(cmd)
+        new_count = self.query(string)
+        self.assertEqual(len(new_count) - len(old_count), 1)
+
+    def getOutput(self, command):
+        """Get output from stdout"""
+        with patch('sys.stdout', new=StringIO()) as out:
+            cmd = HBNBCommand()
+            cmd.onecmd(command)
+            return out.getvalue().strip()
+
+    def test_create_place_with_integer_and_float(self):
+        """Test create City"""
+        string = "SELECT * FROM places"
+        # old_count = self.query(string)
+        cmd = 'create State name="California"'
+        state_id = self.getOutput(cmd)
+        name = "San_Francisco_is_super_cool"
+        cmd = f'create City state_id="{state_id}" name="{name}"'
+        city_id = self.getOutput(cmd)
+        cmd = f'create User email="my@me.com"\
+            password="pwd" first_name="FN" last_name="LN"'
+        user_id = self.getOutput(cmd)
+        cmd = f'create Place city_id="{city_id}" user_id="{user_id}"\
+            name="My_house" description="no_description_yet" number_rooms=4\
+            number_bathrooms=1 max_guest=3 price_by_night=100 latitude=120.12\
+            longitude=101.4'
+        place_id = self.getOutput(cmd)
+        new_count = self.query(string)
+        self.assertIn(place_id, str(new_count))
+        self.assertIn('100', str(new_count))
+        self.assertIn('120.12', str(new_count))
+
+    def test_create_city_with_underscore(self):
+        """Test create City"""
+        string = "SELECT * FROM cities"
+        old_count = self.query(string)
+        cmd = 'create State name="California"'
+        state_id = self.getOutput(cmd)
+        name = "San_Francisco_is_super_cool"
+        cmd = f'create City state_id="{state_id}" name="{name}"'
+        city_id = self.getOutput(cmd)
+        new_count = self.query(string)
+        self.assertEqual(len(new_count) - len(old_count), 1)
+        cmd = 'show City {}'.format(city_id)
+        output = self.getOutput(cmd)
+        self.assertIn(name.replace('_', ' '), output)
+
+    def test_create_city_without_underscore(self):
+        """Test create City"""
+        string = "SELECT * FROM cities"
+        cmd = 'create State name="California"'
+        state_id = self.getOutput(cmd)
+        name = "Fremont"
+        cmd = f'create City state_id="{state_id}" name="{name}"'
+        self.getOutput(cmd)
+        new_count = self.query(string)
+        self.assertIn(name.replace('_', ' '), str(new_count))
 
 @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
                  'console test not supported')
