@@ -25,7 +25,7 @@ class TestDBStorageWithConsole(unittest.TestCase):
             user=os.getenv('HBNB_MYSQL_USER'),
             host=os.getenv('HBNB_MYSQL_HOST'),
             passwd=os.getenv('HBNB_MYSQL_PWD'),
-            port=int(os.getenv('HBNB_MYSQL_PORT')),
+            port=3306,
             db=os.getenv('HBNB_MYSQL_DB')
         )
         cur = db.cursor()
@@ -98,6 +98,7 @@ class TestDBStorageWithConsole(unittest.TestCase):
         self.getOutput(cmd)
         new_count = self.query(string)
         self.assertIn(name.replace('_', ' '), str(new_count))
+
 
 @unittest.skipIf(os.getenv('HBNB_TYPE_STORAGE') == 'db',
                  'console test not supported')
