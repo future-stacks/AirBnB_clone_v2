@@ -22,7 +22,7 @@ def do_pack():
     if not path.isdir("versions"):
         if local("mkdir versions").failed:
             return None
-    cmd = "tar -cvzf {} web_static".format(archive)
+    cmd = "cd web_static && tar -cvzf ../{} . && cd -".format(archive)
     if local(cmd).succeeded:
         return archive
     return None
@@ -52,15 +52,11 @@ def do_deploy(archive_path):
     if run(uncompress).failed:
         return False
     delete_archive = "rm -f /tmp/{}".format(compressedFile)
-    if run("mv {0}/web_static/* {0}/".format(current_release)).failed:
-        return False
-    if run("rm -rf {}/web_static".format(current_release)).failed:
-        return False
     if run(delete_archive).failed:
         return False
     if run("rm -rf /data/web_static/current").failed:
         return False
-    relink = "ln -sf {} /data/web_static/current".format(current_release)
+    relink = "ln -s {} /data/web_static/current".format(current_release)
     if run(relink).failed:
         return False
     return True
