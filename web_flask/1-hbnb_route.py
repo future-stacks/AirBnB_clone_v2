@@ -1,9 +1,6 @@
 #!/usr/bin/python3
 """
 A script that starts a Flask web application:
-Routes:
-    /:      display “Hello HBNB!”
-    /hbnb:  display “HBNB”
 """
 
 from flask import Flask
@@ -15,6 +12,8 @@ app = Flask(__name__)
 def hello_route():
     """
     Displays 'Hello HBNB!'
+    Returns:
+        str: "Hello HBNB"
     """
     return "Hello HBNB!"
 
@@ -23,6 +22,8 @@ def hello_route():
 def hbnb_route():
     """
     Displays 'HBNB'
+    Returns:
+        str: "HBNB"
     """
     return "HBNB"
 

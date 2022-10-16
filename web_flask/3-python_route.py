@@ -1,15 +1,6 @@
 #!/usr/bin/python3
 """
 A script that starts a Flask web application:
-Routes:
-    /:          display “Hello HBNB!”
-    /hbnb:      display “HBNB”
-    /c/<text>:  display “C ” followed by the value of the text variable
-                (replace underscore _ symbols with a space )
-    /python/(<text>):
-                display “Python ”, followed by the value of the text variable
-                (replace underscore _ symbols with a space )
-                - The default value of text is “is cool”
 """
 
 from flask import Flask
@@ -21,6 +12,8 @@ app = Flask(__name__)
 def hello_route():
     """
     Displays 'Hello HBNB!'
+    Returns:
+        str: "Hello HBNB"
     """
     return "Hello HBNB!"
 
@@ -29,6 +22,8 @@ def hello_route():
 def hbnb_route():
     """
     Displays 'HBNB'
+    Returns:
+        str: "HBNB"
     """
     return "HBNB"
 
@@ -37,7 +32,9 @@ def hbnb_route():
 def c_route(text):
     """
     display “C ” followed by the value of the text variable
-    (replace underscore _ symbols with a space )
+        (replace underscore '_' symbols with a space ' ')
+    Returns:
+        str: "C <text>"
     """
     return "C {}".format(text.replace('_', ' '))
 
@@ -47,8 +44,10 @@ def c_route(text):
 def python_route(text="is_cool"):
     """
     display “Python ”, followed by the value of the text variable
-    (replace underscore _ symbols with a space )
-    - The default value of text is “is cool”
+        (replace underscore _ symbols with a space )
+        - The default value of text is “is cool”
+    Returns:
+        str: "Python <text>"
     """
     return "Python {}".format(text.replace('_', ' '))
 

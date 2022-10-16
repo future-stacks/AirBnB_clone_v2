@@ -1,14 +1,6 @@
 #!/usr/bin/python3
 """
 A script that starts a Flask web application:
-Routes:
-    /: display “Hello HBNB!”
-    /hbnb: display “HBNB”
-    /c/<text>: display “C ” followed by the value of the text variable
-    /python/(<text>):
-        display “Python ”, followed by the value of the text variable
-    /number/<n>: display “n is a number” only if n is an integer
-    /number_template/<n>: display a HTML page only if n is an integer:
 """
 
 from flask import Flask
@@ -21,6 +13,8 @@ app = Flask(__name__)
 def hello_route():
     """
     Displays 'Hello HBNB!'
+    Returns:
+        str: "Hello HBNB"
     """
     return "Hello HBNB!"
 
@@ -29,6 +23,8 @@ def hello_route():
 def hbnb_route():
     """
     Displays 'HBNB'
+    Returns:
+        str: "HBNB"
     """
     return "HBNB"
 
@@ -37,7 +33,9 @@ def hbnb_route():
 def c_route(text):
     """
     display “C ” followed by the value of the text variable
-        (replace underscore _ symbols with a space )
+        (replace underscore '_' symbols with a space ' ')
+    Returns:
+        str: "C <text>"
     """
     return "C {}".format(text.replace('_', ' '))
 
@@ -49,6 +47,8 @@ def python_route(text="is_cool"):
     display “Python ”, followed by the value of the text variable
         (replace underscore _ symbols with a space )
         - The default value of text is “is cool”
+    Returns:
+        str: "Python <text>"
     """
     return "Python {}".format(text.replace('_', ' '))
 
@@ -57,6 +57,8 @@ def python_route(text="is_cool"):
 def number_route(n):
     """
     display “n is a number” only if n is an integer
+    Returns:
+        int: the value of n
     """
     return "{} is a number".format(n)
 
@@ -66,6 +68,8 @@ def number_template_route(n):
     """
     display a HTML page only if n is an integer:
         H1 tag: “Number: n” inside the tag BODY
+    Returns:
+        html: template displaying the value of n
     """
     return render_template('5-number.html', n=n)
 
