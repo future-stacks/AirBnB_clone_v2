@@ -15,6 +15,18 @@
 
 ---
 
+### Project phase at last modification
+
+- Understanding and building a web framework with Flask
+- What is a route, how to define routes, and handle variables in routes
+- What is template, how to create dynamic templates and render them in Flask
+
+<p align="center">
+  <img src="./doc/images/hbnb_step3.png" alt="HolbertonBnB stack">
+</p>
+
+---
+
 ### Classes
 
 AirBnB clone implements the following classes:
