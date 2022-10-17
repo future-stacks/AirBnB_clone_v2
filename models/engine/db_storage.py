@@ -12,7 +12,8 @@ from models.place import Place
 from models.review import Review
 from models.amenity import Amenity
 from sqlalchemy import create_engine
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import scoped_session
 
 
 class DBStorage:
@@ -68,3 +69,7 @@ class DBStorage:
         )
         Session = scoped_session(session_factory)
         self.__session = Session()
+
+    def close(self):
+        """Dispose of the current Session, if present."""
+        self.__session.close()
